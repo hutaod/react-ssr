@@ -1,0 +1,37 @@
+{
+  "name": "react-ssr",
+  "version": "1.0.0",
+  "description": "React ssr",
+  "main": "index.js",
+  "scripts": {
+    "dev:server": "webpack --config config/webpack.server.js --watch",
+    "dev:client": "webpack --config config/webpack.client.js --watch",
+    "dev:start": "nodemon --watch build exec node \"./build/bundle.js\"",
+    "start": "npm run dev:server & npm run dev:client & npm run dev:start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ht1131589588/react-ssr.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ht1131589588/react-ssr/issues"
+  },
+  "homepage": "https://github.com/ht1131589588/react-ssr#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "@babel/preset-react": "^7.7.4",
+    "babel-loader": "^8.0.6",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  }
+}
