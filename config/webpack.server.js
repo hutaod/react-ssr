@@ -32,12 +32,12 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
-      },
-      {
-        // css代码不能被打包进服务端的代码中去，忽略掉css文件
-        test: /\.css/,
-        use: ['ignore-loader']
       }
+      // {
+      //   // css代码不能被打包进服务端的代码中去，忽略掉css文件
+      //   test: /\.css/,
+      //   use: ['ignore-loader']
+      // }
     ]
   }
 }
