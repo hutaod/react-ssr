@@ -14,12 +14,11 @@ export default {
     }
   },
   effects: {
-    getCourseList({ dispatch }, { payload }) {
-      return axios.get('http://localhost:9090/api/course/list').then((res) => {
-        dispatch({
-          type: 'putList',
-          payload: res.data.list
-        })
+    async getCourseList({ dispatch }, { payload }) {
+      const res = await axios.get('http://localhost:9090/api/course/list')
+      dispatch({
+        type: 'putList',
+        payload: res.data.list
       })
     }
   }

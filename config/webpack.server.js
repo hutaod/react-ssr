@@ -32,6 +32,9 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+        // options: {
+        //   presets: ['@babel/preset-react', '@babel/preset-env']
+        // }
       }
       // {
       //   // css代码不能被打包进服务端的代码中去，忽略掉css文件
