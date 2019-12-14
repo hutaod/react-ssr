@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Detail from './pages/Detail'
+import Index from './pages/Index'
+import About from './pages/About'
 
 const App = () => {
   return (
     <div>
-      <Route path="/" exact component={Home} />
-      <Route path="/detail" exact component={Detail} />
+      <Route path="/" exact component={Index} />
+      <Route path="/about" exact component={About} />
     </div>
   )
 }

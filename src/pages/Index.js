@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 
-const Home = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => {
+const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
@@ -27,7 +27,7 @@ const Home = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => 
           <li
             key={item.id}
             onClick={() => {
-              history.push('/detail')
+              history.push('/about')
             }}
           >
             <a>{item.name}</a>
@@ -40,4 +40,4 @@ const Home = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => 
 
 export default connect((state) => ({
   courses: state.global.list
-}))(Home)
+}))(Index)

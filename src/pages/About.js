@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Detail = ({ history }) => {
+const About = ({ history }) => {
   return (
     <div>
-      <h1>详情页</h1>
+      <h1>About</h1>
       <button
         onClick={() => {
           history.goBack()
@@ -15,4 +15,4 @@ const Detail = ({ history }) => {
   )
 }
 
-export default Detail
+export default About

@@ -1,90 +1,378 @@
-# React 同构应用  
+## Setp-2
 
-首先从以下几个疑问入手：
+添加路由支持和 redux 数据流
 
-1. 渲染的概念是什么？
-2. 什么是服务端渲染? (服务端渲染的运行机制)
-3. 什么是客户端渲染？
-4. 为什么需要使用服务端渲染？服务端渲染的解决了什么问题？
+### 用 react-router-dom 添加路由支持
 
-## 渲染的概念
+修改客户端入口文件，使用 `react-router-dom` 中的 `BrowserRouter` 组件添加客户端路由
 
-我们可以单纯的把渲染理解为：`渲染就是将数据和模版组装成html`
+```js
+// ./client/index.js
+// ...
+import { BrowserRouter } from 'react-router-dom'
+import App from '../src/App'
 
-## 客户端渲染（CSR）
-
-### 1. 概念：
-
-  `解释一`：客户端渲染模式下，服务端把渲染的静态文件给到客户端，客户端拿到服务端发送过来的文件自己跑一遍js，根据JS运行结果，生成相应DOM，然后渲染给用户。
-
-  `解释二`：html 仅仅作为静态文件，客户端在请求时，服务端不做任何处理，直接以原文件的形式返回给客户端客户端，然后根据 html 上的 JavaScript，生成 DOM 插入 html。
-
-  `延伸`：前端渲染的方式起源于JavaScript的兴起，ajax的大热更是让前端渲染更加成熟，前端渲染真正意义上的实现了前后端分离，前端只专注于UI的开发，后端只专注于逻辑的开发，前后端交互只通过约定好的API来交互，后端提供json数据，前端循环json生成DOM插入到页面中去。
-
-### 2. 利弊：
-
-  `好处`：网络传输数据量小、减少了服务器压力、前后端分离、局部刷新，无需每次请求完整页面、交互好可实现各种效果
-
-  `坏处`: 不利于SEO、爬虫看不到完整的程序源码、首屏渲染慢（渲染前需要下载一堆js和css等，而且很多并不是首页需要的js和css(按需加载可以加快首屏加载)）
-
-## 服务端渲染（SSR）
-
-### 1. 概念：
-
-  `解释一`：服务端在返回 html 之前，先获取数据填充html模板，再给客户端，客户端只负责解析 HTML 。
-
-  `解释二`：服务端渲染的模式下，当用户第一次请求页面时，由服务器把需要的组件或页面渲染成 HTML 字符串，然后把它返回给客户端。客户端拿到手的，是可以直接渲染然后呈现给用户的 HTML 内容，不需要为了生成 DOM 内容自己再去跑一遍 JS 代码。使用服务端渲染的网站，可以说是“所见即所得”，页面上呈现的内容，我们在 html 源文件里也能找到。
-
-### 2. 利弊：
-
-  `好处`：首屏渲染快、利于SEO、可以生成缓存片段，生成静态化文件、节能（对比客户端渲染的耗电）
-
-  `坏处`: 传统服务端渲染的用户体验较差、不容易维护，通常前端改了部分html或者css，后端也需要修改。
-
-## 客户端渲染（CSR）VS 服务端渲染（SSR）
-
-其实前后端的渲染本质是一样的，都是字符串的拼接，将数据渲染进一些固定格式的html代码中形成最终的html展示在用户页面上。 因为字符串的拼接必然会损耗一些性能资源。
-
-- 服务器端渲染，消耗的是server端的性能
-- 客户端渲染，常见的手段，比如是直接生成DOM插入到html 中，或者是使用一些前端的模板引擎等。他们初次渲染的原理大多是将原html中的数据标记（例如{{text}}）替换。
-
-为了更便于理解，下面几段话摘自掘金小册：
-```
-事实上，很多网站是出于效益的考虑才启用服务端渲染，性能倒是在其次。
-假设 A 网站页面中有一个关键字叫“前端性能优化”，这个关键字是 JS 代码跑过一遍后添加到 HTML 页面中的。那么客户端渲染模式下，我们在搜索引擎搜索这个关键字，是找不到 A 网站的——搜索引擎只会查找现成的内容，不会帮你跑 JS 代码。A 网站的运营方见此情形，感到很头大：搜索引擎搜不出来，用户找不到我们，谁还会用我的网站呢？为了把“现成的内容”拿给搜索引擎看，A 网站不得不启用服务端渲染。
-但性能在其次，不代表性能不重要。服务端渲染解决了一个非常关键的性能问题——首屏加载速度过慢。在客户端渲染模式下，我们除了加载 HTML，还要等渲染所需的这部分 JS 加载完，之后还得把这部分 JS 在浏览器上再跑一遍。这一切都是发生在用户点击了我们的链接之后的事情，在这个过程结束之前，用户始终见不到我们网页的庐山真面目，也就是说用户一直在等！相比之下，服务端渲染模式下，服务器给到客户端的已经是一个直接可以拿来呈现给用户的网页，中间环节早在服务端就帮我们做掉了，用户岂不“美滋滋”？
+const Root = (
+  <Provider store={store}>
+    <BrowserRouter>{App}</BrowserRouter>
+  </Provider>
+)
+// ...
 ```
 
-## 为何需要使用ssr
+修改服务端入口文件，使用 `StaticRouter` 组件添加客户端路由
 
-首屏加载速度快、SEO优化
+```js
+// ./client/index.js
+// ...
+import { StaticRouter } from 'react-router-dom'
+import App from '../src/App'
 
-## 为了合并ssr和csr,当前流行的方案就是ssr+csr 同构
+// ...
+app.get('*', (req, res) => {
+  const content = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.url}>{App}</StaticRouter>
+    </Provider>
+  )
+  // ...
+})
+// ...
+```
 
-### 何为同构？
+新增首页和关于页
 
-同构是指写一份代码但可同时在浏览器和服务器中运行的应用。 
+```js
+// src/pages/index.js
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
-### 认识同构
+const Index = ({ name = '哈哈' }) => {
+  const [count, setCount] = useState(0)
 
-同构应用运行原理的核心在于虚拟DOM， 虚拟DOM的优点在于：
-1. 因为操作 DOM 树是高耗时的操作，尽量减少 DOM 树操作能优化网页性能。而 DOM Diff 算法能找出2个不同 Object 的最小差异，得出最小 DOM 操作;
-2. 虚拟DOM的在渲染的时候不仅仅可以通过操作DOM树来表示结果，也能有其他的表示方法。例如虚拟DOM渲染成字符串（服务器渲染）等。
+  return (
+    <div>
+      <h1>
+        hello {name} {count}
+      </h1>
+      <button
+        onClick={() => {
+          setCount(count + 1)
+        }}
+      >
+        Add
+      </button>
+      <Link to="/">关于我</Link>
+    </div>
+  )
+}
 
-构建同构应用的最终目的是从一份项目源码中构建出2份JavaScript代码。一份用于在node环境中运行渲染出HTML。其中用于在node环境中运行的JavaScript代码需要注意：
-1. 不能包含浏览器环境提供的API；
-2. 不能包含css代码，因为服务端渲染的目的是渲染html内容， 渲染出css代码会增加额外的计算量，影响服务端渲染；
-3. 不能像用于浏览器环境的输出代码那样把node_modules里的第三方模块和nodejs原生模块打包进去，而是需要通过commonjs规范去引入这些模块。
-4. 需要通过commonjs规范导出一个渲染函数，以用于在HTTP服务器中执行这个渲染函数，渲染出HTML内容返回。
+export default Index
+```
 
-### 同构解决方案
+```js
+// src/pages/about.js
+import React from 'react'
 
-## 实现 react ssr+csr 同构
+const About = ({ history }) => {
+  return (
+    <div>
+      <h1>About</h1>
+      <button
+        onClick={() => {
+          history.goBack()
+        }}
+      >
+        返回上一页
+      </button>
+    </div>
+  )
+}
 
-### 路由处理
+export default About
+```
 
-### 加入 redux
+修改 App.js
 
-## 参考文章
+```js
+// src/App.js
+import React, { useState } from 'react'
+import { Route } from 'react-router-dom'
+import Index from './pages/Index'
+import About from './pages/About'
 
-- [服务端渲染（SSR)](https://juejin.im/post/5c068fd8f265da61524d2abc)
+const App = () => {
+  return (
+    <div>
+      <Route path="/" exact component={Index} />
+      <Route path="/about" exact component={About} />
+    </div>
+  )
+}
+
+export default <App />
+```
+
+### 添加 redux
+
+先安装相关依赖
+
+```bash
+npm i redux react-redux
+```
+
+为了使 redux 使用更方便，基于 redux 写了一个用法类似 dva 的方案，具体代码实现如下
+
+```js
+// src/redux-model/utils/isPlainObject.js
+/**
+ * @param obj The object to inspect.
+ * @returns True if the argument appears to be a plain object.
+ */
+export default function isPlainObject(obj) {
+  if (typeof obj !== 'object' || obj === null) return false
+
+  let proto = obj
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto)
+  }
+
+  return Object.getPrototypeOf(obj) === proto
+}
+// src/redux-model/index.js
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import isNode from 'detect-node'
+import isPlainObject from './utils/isPlainObject'
+
+let store
+const rootReducers = {}
+const rootEffects = {}
+
+// 动态注入reducer
+export const addReducer = (key, reducer, effects) => {
+  if (!key || typeof key !== 'string') {
+    if (process.env.NODE_ENV !== 'production') {
+      throw Error('error')
+    }
+    return
+  }
+  if (!reducer || typeof reducer !== 'function') {
+    if (process.env.NODE_ENV !== 'production') {
+      throw Error('error')
+    }
+    return
+  }
+  if (rootReducers[key]) {
+    throw Error('reducer has exist')
+  }
+  rootReducers[key] = reducer
+  rootEffects[key] = effects
+
+  if (store) {
+    store.replaceReducer(combineReducers(rootReducers))
+  }
+}
+
+/**
+ *
+ * @param {Object} options
+ * {
+ *  namespace, // model 命名空间
+ *  state, 初始值
+ *  reducers，唯一可以修改state的地方，由action触发
+ *  effects，用于处理异步操作和业务逻辑，不直接修改 state。由 action 触发，可以触发 action，可以和服务器交互，可以获取全局 state 的数据等等。
+ * }
+ */
+export const model = ({ namespace, state, reducers, effects }) => {
+  if (typeof namespace !== 'string' || namespace.trim().length === 0) {
+    console.error('namespace not exist')
+    return
+  }
+  if (typeof state !== 'undefined') {
+    const reducer = function(prevState = state, action) {
+      const typeArr = action.type.split('/')
+      // 判断reducers是是符合要求的对象，并且判断action.type是否符合要求
+      if (isPlainObject(reducers) && typeArr[0] === namespace) {
+        const callFunc = reducers[typeArr[1]]
+
+        if (typeof callFunc === 'function') {
+          const nextState = callFunc(prevState, action)
+          // 如果新的state是undefined就抛出对应错误
+          if (typeof nextState === 'undefined') {
+            throw new Error('return state error！')
+          }
+          return nextState
+        }
+      }
+      return prevState
+    }
+    addReducer(namespace, reducer, effects)
+  }
+}
+
+const rayslog = function({ initialState, initialModels, middlewares = [] }) {
+  // 初始model
+  if (isPlainObject(initialModels)) {
+    for (const key in initialModels) {
+      const initialModel = initialModels[key]
+      if (isPlainObject(initialModel)) {
+        model(initialModel)
+      }
+    }
+  }
+  // 副作用处理
+  const effectsMiddle = (store) => (dispatch) => (action) => {
+    if (isPlainObject(action) && typeof action.type === 'string') {
+      const { type, ...args } = action
+      const actionType = action.type.split('/')
+      const namespace = actionType[0]
+      const actualtype = actionType[1]
+      if (rootEffects[namespace] && rootEffects[namespace][actualtype]) {
+        return rootEffects[namespace][actualtype](
+          {
+            dispatch: ({ type, ...rest }) => {
+              return dispatch({
+                type: `${namespace}/${type}`,
+                ...rest
+              })
+            }
+          },
+          { ...args }
+        )
+      }
+      return dispatch(action)
+    }
+    return dispatch(action)
+  }
+
+  let composeEnhancers = compose
+  if (!isNode) {
+    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  }
+  // 创建store
+  store = createStore(
+    combineReducers(rootReducers),
+    initialState,
+    composeEnhancers(applyMiddleware(effectsMiddle, ...middlewares))
+  )
+
+  return {
+    store,
+    addReducer,
+    getStore() {
+      return store
+    }
+  }
+}
+
+export default rayslog
+```
+
+添加 store 文件夹用于管理全局 store
+
+```js
+// src/store/index.js
+import reduxModel from '../redux-model'
+import global from './global'
+
+// models
+const initialModels = {
+  global
+}
+
+const { store } = reduxModel({ initialModels })
+
+export default store
+
+// src/store/global.js
+import axios from '../utils/axios'
+
+export default {
+  namespace: 'global',
+  state: {
+    list: []
+  },
+  reducers: {
+    putList(state, { payload }) {
+      return {
+        ...state,
+        list: payload
+      }
+    }
+  },
+  effects: {
+    async getCourseList({ dispatch }, { payload }) {
+      const res = await axios.get('/api/course/list')
+      dispatch({
+        type: 'putList',
+        payload: res.list
+      })
+    }
+  }
+}
+```
+
+其他相关代码修改
+
+```js
+// ./client/index.js
+// ..
+import { Provider } from 'react-redux'
+import store from '../src/store'
+const Root = (
+  <Provider store={store}>
+    <BrowserRouter>{App}</BrowserRouter>
+  </Provider>
+)
+export default ReactDom.hydrate(Root, document.getElementById('root'))
+
+// ./server/index.js
+// ..
+import { Provider } from 'react-redux'
+// ..
+import store from '../src/store'
+// ..
+app.get('*', (req, res) => {
+  const content = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.url}>{App}</StaticRouter>
+    </Provider>
+  )
+  // ..
+})
+// ..
+
+// 在首页Index组件中就可以使用获取store中的数据和发起action
+// src/pages/Index.js
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+
+const Index = ({ courses, dispatch, history }) => {
+  useEffect(() => {
+    dispatch({
+      type: 'global/getCourseList'
+    })
+  }, [])
+  return (
+    <div>
+      <h3>课程列表</h3>
+      <ul>
+        {courses.map((item) => (
+          <li
+            key={item.id}
+            onClick={() => {
+              history.push('/detail')
+            }}
+          >
+            <a>{item.name}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+export default connect((state) => ({
+  courses: state.global.list
+}))(Index)
+```
