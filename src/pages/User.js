@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import axios from '../utils/axios'
-import { model } from '../redux-model'
+import { model } from 'demacia'
 
 model({
   namespace: 'user',

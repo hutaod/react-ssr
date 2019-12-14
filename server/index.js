@@ -40,8 +40,6 @@ app.get('*', (req, res) => {
 
   // 等待所有异步任务执行完毕后再进行响应客户端
   Promise.all(promises).then((data) => {
-    console.log(data)
-
     const content = renderToString(
       <Provider store={store}>
         <StaticRouter location={req.url}>

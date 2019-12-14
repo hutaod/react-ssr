@@ -1,4 +1,4 @@
-import reduxModel from '../redux-model'
+import reduxModel from 'demacia'
 import global from './global'
 
 // models
