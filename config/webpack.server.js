@@ -11,13 +11,12 @@
  */
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
-console.log(path.resolve(__dirname, '../build'))
 
 module.exports = {
   // 为了不把nodejs内置模块打包进进输出文件，例如：fs net 模块
   target: 'node',
   mode: 'development',
-  entry: path.resolve(__dirname, '../src/server/index.js'),
+  entry: path.resolve(__dirname, '../server/index.js'),
   // 不把node_modules目录下的第三方模块打包进输出文件中
   externals: [nodeExternals()],
   output: {

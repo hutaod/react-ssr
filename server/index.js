@@ -1,6 +1,6 @@
 import { renderToString } from 'react-dom/server'
 import express from 'express'
-import App from '../client/App'
+import App from '../src/App'
 
 const app = express()
 
@@ -8,7 +8,6 @@ app.use(express.static('public'))
 
 app.get('/', (req, res) => {
   const content = renderToString(App)
-  console.log(content)
 
   res.send(`
     <!doctype html>
