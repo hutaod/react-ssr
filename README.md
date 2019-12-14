@@ -376,3 +376,59 @@ export default connect((state) => ({
   courses: state.global.list
 }))(Index)
 ```
+
+### babel 配置升级
+
+为了支持 async/await 和一些其他 js 新语法，先安装相关 babel 依赖
+
+```bash
+npm i -D @babel/plugin-transform-runtime
+npm i -S @babel/runtime @babel/runtime-corejs3
+```
+
+修改 .babelrc
+
+```js
+// .babelrc
+{
+  "presets": ["@babel/preset-react", "@babel/preset-env"],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3
+      }
+    ]
+  ]
+}
+```
+
+### 添加 mock 支持
+
+为了更好的开发测试，新建 mock 文件,模拟接口
+
+```js
+// mock/index.js
+const express = require('express')
+const app = express()
+
+app.get('/api/course/list', (req, res) => {
+  // 跨域设置
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE')
+  res.header('Content-Type', 'application/json;charset=utf-8')
+  res.json({
+    code: 0,
+    list: [
+      { name: 'Web前端', id: 1 },
+      { name: 'Java', id: 2 }
+    ]
+  })
+})
+
+app.listen(9090, () => {
+  console.log('mock at 9090')
+})
+```
+
+用 nodemon 启动后就可以 mock 接口了
