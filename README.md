@@ -60,7 +60,7 @@
 
 首屏加载速度快、SEO 优化
 
-## 为了合并 ssr 和 csr,当前流行的方案就是 ssr+csr 同构
+## 为了同时拥有 ssr 和 csr 的特点，当前流行的方案就是 ssr+csr 同构
 
 ### 何为同构？
 
@@ -82,9 +82,19 @@
 
 ## 实现 react ssr+csr 同构
 
-### 路由处理
+`react-dom`在渲染虚拟 dom 树时有 3 种方式可选:
 
-### 加入 redux
+1. 通过`render()`把 react 组件挂载到浏览器 DOM 上
+2. 通过`renderToString()`把 react 组件解析成 表示虚拟 DOM 的 html 字符
+3. `hydrate()` 与`render()`相同，但用于混合容器，该容器的 HTML 内容是由 `ReactDOMServer` 渲染的。React 将尝试将事件监听器附加到现有的 html 标签上。
+
+需要注意的是 `nodejs` 本身不支持 `jsx`，需要 `babel` 的支持。
+
+下面从零开始实现一个 React 同构应用：
+
+1. [Step1 - 环境搭建和基本配置](https://github.com/ht1131589588/react-ssr/issues/2)
+2. [Step2 - 添加路由支持和 redux 数据流](https://github.com/ht1131589588/react-ssr/issues/3)
+3. Step3 - 服务端和客户端数据流同步 正在制作中...
 
 ## 参考文章
 
