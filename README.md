@@ -94,7 +94,7 @@
 
 1. [Step1 - 环境搭建和基本配置](https://github.com/ht1131589588/react-ssr/issues/2)
 2. [Step2 - 添加路由支持和 redux 数据流](https://github.com/ht1131589588/react-ssr/issues/3)
-3. Step3 - 服务端和客户端数据流同步 正在制作中...
+3. [Step3 - 服务端和客户端数据流同步](https://github.com/ht1131589588/react-ssr/issues/4)
 
 ## 参考文章
 

@@ -1,3 +1,9 @@
+# React 同构应用开发 - Step 3
+
+1. 异步数据如何在首屏渲染的时候呈现在 html 中
+2. 前后端统一数据处理
+3. 统一处理 axios 请求
+
 ## 异步数据如何在首屏渲染的时候呈现在 html 中
 
 解决思路：
@@ -291,3 +297,7 @@ app.use('/api', proxy({ target: 'http://localhost:9090/', changeOrigin: true }))
 
 - 路由切换是如何实现不重新请求后端的？
 - 能否请求数据只写一遍逻辑，而不需要判断否有初始数据来判断是否应该再客户端请求数据，再写一次重复的逻辑
+
+## 结语
+
+仓库代码地址：[https://github.com/ht1131589588/react-ssr/tree/step-3](https://github.com/ht1131589588/react-ssr/tree/step-3)
