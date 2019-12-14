@@ -90,11 +90,11 @@
 
 需要注意的是 `nodejs` 本身不支持 `jsx`，需要 `babel` 的支持。下面从零开始搭建一个同构开发环境
 
-### Step-1
+## Step-1
 
 环境搭建和基本配置
 
-#### 环境搭建
+### 环境搭建
 
 初始化项目：
 
@@ -209,7 +209,7 @@ const App = ({ name }) => {
 export default <App name="哈哈" />
 ```
 
-#### ssr 和 csr 入口文件配置
+### ssr 和 csr 入口文件配置
 
 客户端入口文件：
 
@@ -267,7 +267,7 @@ app.listen(8091, () => {
 })
 ```
 
-#### npm scripts 编写
+### npm scripts 编写
 
 ```json
 "scripts": {
