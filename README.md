@@ -82,9 +82,249 @@
 
 ## 实现 react ssr+csr 同构
 
-### 路由处理
+`react-dom`在渲染虚拟 dom 树时有 3 种方式可选:
 
-### 加入 redux
+1. 通过`render()`把 react 组件挂载到浏览器 DOM 上
+2. 通过`renderToString()`把 react 组件解析成 表示虚拟 DOM 的 html 字符
+3. `hydrate()` 与`render()`相同，但用于混合容器，该容器的 HTML 内容是由 `ReactDOMServer` 渲染的。React 将尝试将事件监听器附加到现有的 html 标签上。
+
+需要注意的是 `nodejs` 本身不支持 `jsx`，需要 `babel` 的支持。下面从零开始搭建一个同构开发环境
+
+### Step-1
+
+环境搭建和基本配置
+
+#### 环境搭建
+
+初始化项目：
+
+```bash
+npm init -y
+```
+
+下载相关插件:
+
+```bash
+npm i -D webpack webpack-cli webpack-node-externals @babel/core babel-loader @babel/preset-env nodemon
+npm i -S react react-dom express
+```
+
+编写 服务端 webpack 配置：
+
+```js
+// ./config/webpack.server.js
+const path = require('path')
+const nodeExternals = require('webpack-node-externals')
+
+module.exports = {
+  // 为了不把nodejs内置模块打包进进输出文件，例如：fs net 模块
+  target: 'node',
+  mode: 'development',
+  entry: path.resolve(__dirname, '../server/index.js'),
+  // 不把node_modules目录下的第三方模块打包进输出文件中
+  externals: [nodeExternals()],
+  output: {
+    //为了以commonjs2规范导出渲染函数，以给采用nodejs编写的HTTP服务调用
+    libraryTarget: 'commonjs2',
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '../build')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      }
+    ]
+  }
+}
+```
+
+编写 客户端 webpack 配置：
+
+```js
+// ./config/webpack.client.js
+const path = require('path')
+
+module.exports = {
+  mode: 'development',
+  entry: path.resolve(__dirname, '../client/index.js'),
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '../public')
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
+      }
+    ]
+  }
+}
+```
+
+编写 babel 配置
+
+```js
+{
+  "presets": ["@babel/preset-react", "@babel/preset-env"],
+  "plugins": [
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "corejs": 3
+      }
+    ]
+  ]
+}
+```
+
+新建 react 组件
+
+```js
+// ./src/App.js
+import React, { useState } from 'react'
+
+const App = ({ name }) => {
+  const [count, setCount] = useState(0)
+  return (
+    <div>
+      <h3>
+        hello {name} {count}
+      </h3>
+      <button
+        onClick={() => {
+          setCount(count + 1)
+        }}
+      >
+        Add
+      </button>
+    </div>
+  )
+}
+
+export default <App name="哈哈" />
+```
+
+#### ssr 和 csr 入口文件配置
+
+客户端入口文件：
+
+```js
+// ./client/index.js
+import ReactDom from 'react-dom'
+import App from './App'
+
+export default ReactDom.hydrate(App, document.getElementById('root'))
+```
+
+客户端入口文件配置：
+
+```js
+// ./client/index.js
+import ReactDom from 'react-dom'
+import App from '../src/App'
+
+export default ReactDom.hydrate(App, document.getElementById('root'))
+```
+
+服务端入口文件配置：
+
+```js
+// ./server/index.js
+import { renderToString } from 'react-dom/server'
+import express from 'express'
+import App from '../src/App'
+
+const app = express()
+// 设置静态文件默认位置
+app.use(express.static('public'))
+
+app.get('/', (req, res) => {
+  // 把react组件转换为html字符串
+  const content = renderToString(App)
+
+  res.send(`
+    <!doctype html>
+    <html>
+      <head>
+        <title>react ssr</title>
+        <meta charset="utf-8" />
+      </head>
+      <body>
+        <div id="root">${content}</div>
+        <script src="bundle.js"></script>
+      </body>
+    </html>
+  `)
+})
+
+app.listen(8091, () => {
+  console.log('监听完毕')
+})
+```
+
+#### npm scripts 编写
+
+```json
+"scripts": {
+  "dev:server": "webpack --config config/webpack.server.js --watch",
+  "dev:client": "webpack --config config/webpack.client.js --watch",
+  "dev:start": "nodemon --watch build exec node \"./build/bundle.js\"",
+  "start": "npm run dev:server & npm run dev:client & npm run dev:start"
+},
+```
+
+运行 npm start 后就可以同时启动开发环境了
+
+#### Setp-1 总结
+
+- 缺少热重载，修改代码后需要手动刷新浏览器
+
+### Setp-2
+
+添加路由支持和 redux 数据流
+
+#### 用 react-router-dom 添加路由支持
+
+修改客户端入口文件，使用 `react-router-dom` 中的 `BrowserRouter` 组件添加客户端路由
+
+```js
+// ./client/index.js
+// ...
+import { BrowserRouter } from 'react-router-dom'
+import App from '../src/App'
+
+const Root = (
+  <Provider store={store}>
+    <BrowserRouter>{App}</BrowserRouter>
+  </Provider>
+)
+// ...
+```
+
+修改服务端入口文件，使用 `StaticRouter` 组件添加客户端路由
+
+```js
+// ./client/index.js
+// ...
+import { StaticRouter } from 'react-router-dom'
+import App from '../src/App'
+
+// ...
+app.get('*', (req, res) => {
+  const content = renderToString(
+    <Provider store={store}>
+      <StaticRouter location={req.url}>{App}</StaticRouter>
+    </Provider>
+  )
+  // ...
+})
+// ...
+```
 
 ## 参考文章
 
