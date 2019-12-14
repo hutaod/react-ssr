@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
-import { Route } from 'react-router-dom'
-import Home from './pages/Home'
-import Detail from './pages/Detail'
+import Index from './pages/Index'
+import About from './pages/About'
+import User from './pages/User'
 
-const App = () => {
-  return (
-    <div>
-      <Route path="/" exact component={Home} />
-      <Route path="/detail" exact component={Detail} />
-    </div>
-  )
-}
-
-export default <App />
+export default [
+  {
+    path: '/',
+    component: Index,
+    // exact: true,
+    key: 'index'
+  },
+  {
+    path: '/about',
+    component: About,
+    exact: true,
+    key: '/about'
+  },
+  {
+    path: '/user',
+    component: User,
+    exact: true,
+    key: '/user'
+  }
+]

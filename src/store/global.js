@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../utils/axios'
 
 export default {
   namespace: 'global',
@@ -15,10 +15,10 @@ export default {
   },
   effects: {
     async getCourseList({ dispatch }, { payload }) {
-      const res = await axios.get('http://localhost:9090/api/course/list')
+      const res = await axios.get('/api/course/list')
       dispatch({
         type: 'putList',
-        payload: res.data.list
+        payload: res.list
       })
     }
   }

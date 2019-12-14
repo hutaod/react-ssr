@@ -6,6 +6,13 @@ const initialModels = {
   global
 }
 
-const { store } = reduxModel({ initialModels })
+export const getServerStore = () => {
+  const { store } = reduxModel({ initialModels })
+  return store
+}
 
-export default store
+export const getClientStore = () => {
+  const initialState = window.__context || {}
+  const { store } = reduxModel({ initialModels, initialState })
+  return store
+}
