@@ -407,7 +407,7 @@ export default <App />
 npm i redux react-redux
 ```
 
-为了使 redux 使用更方便，基于 redux 写了一个方案放置与 redux-model
+为了使 redux 使用更方便，基于 redux 写了一个用法类似 dva 的方案，具体代码实现如下
 
 ```js
 // src/redux-model/utils/isPlainObject.js
