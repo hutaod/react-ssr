@@ -81,13 +81,6 @@ const rayslog = function({ initialState, initialModels, middlewares = [] }) {
     }
   }
 
-  const thunk = (store) => (dispatch) => (action) => {
-    if (typeof action === 'function') {
-      return action(dispatch, store)
-    }
-    return dispatch(action)
-  }
-
   const effectsMiddle = (store) => (dispatch) => (action) => {
     if (isPlainObject(action) && typeof action.type === 'string') {
       const { type, ...args } = action
@@ -120,7 +113,7 @@ const rayslog = function({ initialState, initialModels, middlewares = [] }) {
   store = createStore(
     combineReducers(rootReducers),
     initialState,
-    composeEnhancers(applyMiddleware(effectsMiddle, thunk, ...middlewares))
+    composeEnhancers(applyMiddleware(effectsMiddle, ...middlewares))
   )
 
   return {
