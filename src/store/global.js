@@ -3,23 +3,25 @@ import axios from '../utils/axios'
 export default {
   namespace: 'global',
   state: {
-    list: []
+    list: [],
   },
   reducers: {
     putList(state, { payload }) {
       return {
         ...state,
-        list: payload
+        list: payload,
       }
-    }
+    },
   },
   effects: {
-    async getCourseList({ dispatch }, { payload }) {
-      const res = await axios.get('/api/course/list')
+    async getCourseList({ dispatch, $axios }, { payload }) {
+      console.log($axios)
+
+      const res = await $axios.get('/api/course/list')
       dispatch({
         type: 'putList',
-        payload: res.list
+        payload: res.list,
       })
-    }
-  }
+    },
+  },
 }

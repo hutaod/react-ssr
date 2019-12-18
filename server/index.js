@@ -5,7 +5,7 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import chalk from 'chalk'
 import axios from '../src/utils/axios'
-import { StaticRouter, Route, matchPath } from 'react-router-dom'
+import { StaticRouter, Route, matchPath, Switch } from 'react-router-dom'
 import routes from '../src/App'
 import Header from '../src/components/Header'
 import { getServerStore } from '../src/store'
@@ -40,16 +40,31 @@ app.get('*', (req, res) => {
 
   // 等待所有异步任务执行完毕后再进行响应客户端
   Promise.all(promises).then((data) => {
+    const context = {}
     const content = renderToString(
       <Provider store={store}>
-        <StaticRouter location={req.url}>
+        <StaticRouter location={req.url} context={context}>
           <Header />
-          {routes.map((route) => (
-            <Route {...route} />
-          ))}
+          <Switch>
+            {routes.map((route) => (
+              <Route {...route} />
+            ))}
+          </Switch>
         </StaticRouter>
       </Provider>
     )
+
+    if (context.status === 404) {
+      res.status(404)
+    }
+
+    if (context.action === 'REPLACE' && context.url) {
+      // bu return会报错
+      return res.redirect(301, context.url)
+    }
+
+    // console.log(context)
+
     // 向window.__context注入服务端store的内容
     const initialState = `
       <script>

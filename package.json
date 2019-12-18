@@ -7,7 +7,7 @@
     "dev:server": "webpack --config config/webpack.server.js --watch",
     "dev:client": "webpack --config config/webpack.client.js --watch",
     "dev:start": "nodemon --watch build exec node \"./build/bundle.js\"",
-    "start": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:start\""
+    "start": "concurrently \"npm run dev:server\" \"npm run dev:client\" \"npm run dev:start\" \"nodemon mock/index.js\""
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,11 @@
     "babel-loader": "^8.0.6",
     "chalk": "^3.0.0",
     "concurrently": "^5.0.1",
+    "css-loader": "^3.4.0",
     "dotenv": "^8.2.0",
     "http-proxy-middleware": "^0.20.0",
+    "isomorphic-style-loader": "^5.1.0",
+    "style-loader": "^1.0.2",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-node-externals": "^1.7.2"

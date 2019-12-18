@@ -70,7 +70,12 @@ export const model = ({ namespace, state, reducers, effects }) => {
   }
 }
 
-const rayslog = function({ initialState, initialModels, middlewares = [] }) {
+const rayslog = function({
+  initialState,
+  initialModels,
+  middlewares = [],
+  effectsExtraArgument = {},
+}) {
   // 初始model
   if (isPlainObject(initialModels)) {
     for (const key in initialModels) {
@@ -93,9 +98,10 @@ const rayslog = function({ initialState, initialModels, middlewares = [] }) {
             dispatch: ({ type, ...rest }) => {
               return dispatch({
                 type: `${namespace}/${type}`,
-                ...rest
+                ...rest,
               })
-            }
+            },
+            ...effectsExtraArgument,
           },
           { ...args }
         )
@@ -121,7 +127,7 @@ const rayslog = function({ initialState, initialModels, middlewares = [] }) {
     addReducer,
     getStore() {
       return store
-    }
+    },
   }
 }
 

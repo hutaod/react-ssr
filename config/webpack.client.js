@@ -5,15 +5,19 @@ module.exports = {
   entry: path.resolve(__dirname, '../client/index.js'),
   output: {
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '../public')
+    path: path.resolve(__dirname, '../public'),
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
-      }
-    ]
-  }
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+    ],
+  },
 }

@@ -9,14 +9,12 @@ const app = express()
 // })
 
 app.get('/api/course/list', (req, res) => {
-  console.log(123)
-
   res.json({
     code: 0,
     list: [
       { name: 'Web前端', id: 1 },
-      { name: 'Java', id: 2 }
-    ]
+      { name: 'Java', id: 2 },
+    ],
   })
 })
 
@@ -25,8 +23,8 @@ app.get('/api/user/info', (req, res) => {
     code: 0,
     data: {
       name: 'hellott',
-      age: 25
-    }
+      age: 25,
+    },
   })
 })
 

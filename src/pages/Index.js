@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import './styles.css'
 
 const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => {
   const [count, setCount] = useState(0)
@@ -8,7 +9,7 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
   useEffect(() => {
     if (courses.length === 0) {
       dispatch({
-        type: 'global/getCourseList'
+        type: 'global/getCourseList',
       })
     }
   }, [])
@@ -43,10 +44,10 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
 
 Index.loadData = ({ dispatch }) => {
   return dispatch({
-    type: 'global/getCourseList'
+    type: 'global/getCourseList',
   })
 }
 
 export default connect((state) => ({
-  courses: state.global.list
+  courses: state.global.list,
 }))(Index)

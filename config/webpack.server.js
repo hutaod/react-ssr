@@ -23,23 +23,27 @@ module.exports = {
     //为了以commonjs2规范导出渲染函数，以给采用nodejs编写的HTTP服务调用
     libraryTarget: 'commonjs2',
     filename: 'bundle.js',
-    path: path.resolve(__dirname, '../build')
+    path: path.resolve(__dirname, '../build'),
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
         // options: {
         //   presets: ['@babel/preset-react', '@babel/preset-env']
         // }
-      }
+      },
+      {
+        test: /\.css$/,
+        use: ['isomorphic-style-loader', 'css-loader'],
+      },
       // {
-      //   // css代码不能被打包进服务端的代码中去，忽略掉css文件
+      //   // css代码不被打包进服务端的代码中去，忽略掉css文件
       //   test: /\.css/,
       //   use: ['ignore-loader']
       // }
-    ]
-  }
+    ],
+  },
 }

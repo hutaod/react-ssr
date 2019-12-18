@@ -1,37 +1,39 @@
 import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
-import axios from '../utils/axios'
-import { model } from 'demacia'
+import { Redirect } from 'react-router-dom'
+import { model } from '../redux-model'
 
 model({
   namespace: 'user',
   state: {
-    userInfo: {}
+    userInfo: {},
   },
   reducers: {
     putUser(state, { payload }) {
       return {
         ...state,
-        userInfo: payload
+        userInfo: payload,
       }
-    }
+    },
   },
   effects: {
-    async getUserInfo({ dispatch }, { payload }) {
-      const res = await axios.get('/api/user/info')
+    async getUserInfo({ dispatch, $axios }, { payload }) {
+      const res = await $axios.get('/api/user/info')
       dispatch({
         type: 'putUser',
-        payload: res.data
+        payload: res.data,
       })
-    }
-  }
+    },
+  },
 })
 
 const User = ({ userInfo, dispatch }) => {
+  return <Redirect to="/" />
+
   useEffect(() => {
     if (!userInfo.name) {
       dispatch({
-        type: 'user/getUserInfo'
+        type: 'user/getUserInfo',
       })
     }
   }, [])
@@ -46,12 +48,12 @@ const User = ({ userInfo, dispatch }) => {
 
 User.loadData = ({ dispatch }) => {
   return dispatch({
-    type: 'user/getUserInfo'
+    type: 'user/getUserInfo',
   })
 }
 
 export default connect((state) => {
   return {
-    userInfo: state.user.userInfo
+    userInfo: state.user.userInfo,
   }
 })(User)
