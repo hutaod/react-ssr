@@ -1,3 +1,5 @@
+import path from 'path'
+import fs from 'fs'
 import { renderToString } from 'react-dom/server'
 import express from 'express'
 import proxy from 'http-proxy-middleware'
@@ -17,7 +19,30 @@ app.use(express.static('public'))
 
 app.use('/api', proxy({ target: 'http://localhost:9090/', changeOrigin: true }))
 
+function renderCsr(res) {
+  const fileUrl = path.resolve(process.cwd(), 'public/index.csr.html')
+  let csrHtml
+  try {
+    csrHtml = fs.readFileSync(fileUrl, 'utf-8')
+  } catch (error) {
+    csrHtml = '静态文件错误'
+  }
+  return res.send(`${csrHtml}`)
+}
+
 app.get('*', (req, res) => {
+  console.log(req.query._mode)
+
+  if (req.query._mode === 'csr') {
+    // url参数开启csr降级
+    console.log('url参数开启csr降级')
+    return renderCsr(res)
+  }
+
+  // 配置开关开启csr
+
+  // 服务器负载过高，自动开启csr
+
   // 获取匹配路由中需要初始化请求数据的方法
   const promises = []
   routes.some((route) => {
@@ -40,7 +65,10 @@ app.get('*', (req, res) => {
 
   // 等待所有异步任务执行完毕后再进行响应客户端
   Promise.all(promises).then((data) => {
-    const context = {}
+    const context = {
+      css: [],
+    }
+
     const content = renderToString(
       <Provider store={store}>
         <StaticRouter location={req.url} context={context}>
@@ -71,12 +99,17 @@ app.get('*', (req, res) => {
         window.__context = ${JSON.stringify(store.getState())}
       </script>
     `
+    const cssContent = context.css.join('\n')
+
     res.send(`
-      <!doctype html>
+      <!DOCTYPE html>
       <html>
         <head>
           <title>react ssr</title>
           <meta charset="utf-8" />
+          <style>
+            ${cssContent}
+          </style>
           ${initialState}
         </head>
         <body>

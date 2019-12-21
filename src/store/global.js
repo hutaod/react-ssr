@@ -15,8 +15,6 @@ export default {
   },
   effects: {
     async getCourseList({ dispatch, $axios }, { payload }) {
-      console.log($axios)
-
       const res = await $axios.get('/api/course/list')
       dispatch({
         type: 'putList',

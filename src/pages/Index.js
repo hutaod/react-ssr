@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'
-import './styles.css'
+import withStyle from './withStyle'
+import styles from './styles.css'
 
 const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) => {
   const [count, setCount] = useState(0)
   // console.log('courses', courses)
+  // if (restProps.staticContext) {
+  //   restProps.staticContext.css.push(styles)
+  // }
 
   useEffect(() => {
     if (courses.length === 0) {
@@ -15,8 +19,8 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
   }, [])
   return (
     <div>
-      <h1>
-        hello {name} {count}
+      <h1 className={styles.title}>
+        hello1 {name} {count}
       </h1>
       <button
         onClick={() => {
@@ -50,4 +54,4 @@ Index.loadData = ({ dispatch }) => {
 
 export default connect((state) => ({
   courses: state.global.list,
-}))(Index)
+}))(withStyle(Index, styles))

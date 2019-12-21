@@ -37,7 +37,17 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['isomorphic-style-loader', 'css-loader'],
+        use: [
+          'isomorphic-style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[path][name]__[local]--[hash:base64:5]',
+              },
+            },
+          },
+        ],
       },
       // {
       //   // css代码不被打包进服务端的代码中去，忽略掉css文件

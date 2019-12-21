@@ -19,4 +19,8 @@ const Root = (
   </Provider>
 )
 
-export default ReactDom.hydrate(Root, document.getElementById('root'))
+if (window.__context) {
+  ReactDom.hydrate(Root, document.getElementById('root'))
+} else {
+  ReactDom.render(Root, document.getElementById('root'))
+}
