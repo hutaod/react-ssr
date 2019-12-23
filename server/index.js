@@ -47,6 +47,7 @@ app.get('*', (req, res) => {
   const promises = []
   routes.some((route) => {
     const loadData = route.component.loadData
+
     if (matchPath(req.path, route) && typeof loadData === 'function') {
       // promises.push(loadData(store))
       // 处理异步任务报错，页面不会渲染
