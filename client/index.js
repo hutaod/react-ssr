@@ -11,7 +11,7 @@ const Root = (
     <BrowserRouter>
       <Header />
       <Switch>
-        {routes.map((route) => (
+        {routes.map(route => (
           <Route {...route} />
         ))}
       </Switch>

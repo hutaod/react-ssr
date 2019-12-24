@@ -13,7 +13,7 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
   useEffect(() => {
     if (courses.length === 0) {
       dispatch({
-        type: 'global/getCourseList',
+        type: 'global/getCourseList'
       })
     }
   }, [])
@@ -31,7 +31,7 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
       </button>
       <h3>课程列表</h3>
       <ul>
-        {courses.map((item) => (
+        {courses.map(item => (
           <li
             key={item.id}
             onClick={() => {
@@ -48,10 +48,10 @@ const Index = ({ name = '哈哈', courses, dispatch, history, ...restProps }) =>
 
 Index.loadData = ({ dispatch }) => {
   return dispatch({
-    type: 'global/getCourseList',
+    type: 'global/getCourseList'
   })
 }
 
-export default connect((state) => ({
-  courses: state.global.list,
+export default connect(state => ({
+  courses: state.global.list
 }))(withStyle(Index, styles))

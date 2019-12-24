@@ -74,7 +74,7 @@ const rayslog = function({
   initialState,
   initialModels,
   middlewares = [],
-  effectsExtraArgument = {},
+  effectsExtraArgument = {}
 }) {
   // 初始model
   if (isPlainObject(initialModels)) {
@@ -86,7 +86,7 @@ const rayslog = function({
     }
   }
 
-  const effectsMiddle = (store) => (dispatch) => (action) => {
+  const effectsMiddle = store => dispatch => action => {
     if (isPlainObject(action) && typeof action.type === 'string') {
       const { type, ...args } = action
       const actionType = action.type.split('/')
@@ -98,10 +98,10 @@ const rayslog = function({
             dispatch: ({ type, ...rest }) => {
               return dispatch({
                 type: `${namespace}/${type}`,
-                ...rest,
+                ...rest
               })
             },
-            ...effectsExtraArgument,
+            ...effectsExtraArgument
           },
           { ...args }
         )
@@ -127,7 +127,7 @@ const rayslog = function({
     addReducer,
     getStore() {
       return store
-    },
+    }
   }
 }
 

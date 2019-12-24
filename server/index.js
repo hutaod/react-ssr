@@ -45,17 +45,17 @@ app.get('*', (req, res) => {
 
   // 获取匹配路由中需要初始化请求数据的方法
   const promises = []
-  routes.some((route) => {
+  routes.some(route => {
     const loadData = route.component.loadData
 
     if (matchPath(req.path, route) && typeof loadData === 'function') {
       // promises.push(loadData(store))
       // 处理异步任务报错，页面不会渲染
       promises.push(
-        new Promise((resolve) => {
+        new Promise(resolve => {
           loadData({ ...store, axios })
             .then(resolve)
-            .catch((err) => {
+            .catch(err => {
               console.error(chalk.redBright(err))
               resolve(err)
             })
@@ -65,9 +65,9 @@ app.get('*', (req, res) => {
   })
 
   // 等待所有异步任务执行完毕后再进行响应客户端
-  Promise.all(promises).then((data) => {
+  Promise.all(promises).then(data => {
     const context = {
-      css: [],
+      css: []
     }
 
     const content = renderToString(
@@ -75,7 +75,7 @@ app.get('*', (req, res) => {
         <StaticRouter location={req.url} context={context}>
           <Header />
           <Switch>
-            {routes.map((route) => (
+            {routes.map(route => (
               <Route {...route} />
             ))}
           </Switch>
