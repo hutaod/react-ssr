@@ -6,23 +6,33 @@ module.exports = {
   // 则取默认值development，使用这样方式进行配置可以定义多个不同的配置项，
   // 同时可以通过环境变量来控制要读取的配置。
   env: {
+    node: {
+      presets: [
+        [
+          '@babel/preset-env',
+          {
+            targets: {
+              node: 'current'
+            }
+          }
+        ],
+        '@babel/preset-react'
+      ],
+      plugins: ['@babel/plugin-proposal-class-properties']
+    },
     development: {
       presets: [
         [
           '@babel/preset-env',
           {
-            targets: [
-              '>1%',
-              'last 2 versions',
-              'not ie <= 8'
-            ]
+            targets: {
+              browsers: ['>1%', 'last 2 versions', 'not ie <= 8'],
+            }
           }
         ],
         '@babel/preset-react'
       ],
-      plugins: [
-        '@babel/plugin-proposal-class-properties'
-      ]
+      plugins: ['@babel/plugin-proposal-class-properties']
     }
   }
 }

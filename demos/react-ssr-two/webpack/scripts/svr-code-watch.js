@@ -1,16 +1,16 @@
 const webpack = require("webpack")
 const config = require("../webpack.server.config")
-const constantCode = './constant'
+const constantCode = require("./constant")
 
 config.mode = 'development' // 设置编译模式
-
 // 编译对象
 const compiler = webpack(config)
 
 const watching = compiler.watch({
   aggregateTimeout: 300, // 类似节流功能,聚合多个更改一起构建
-  ignored: /node_modules/,// 排除文件
+  ignored: /node_modules/, // 排除文件
   poll: 2000, // 轮询的方式检查，单位: 秒，如果监听没生效，可以试试这个选项.
+  'info-verbosity': 'verbose', // 在增量构建的开始和结束时，向控制台发送消息
 }, (err, stats) => {
   let json = stats.toJson("minimal")
   if(json.errors) {

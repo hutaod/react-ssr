@@ -2,16 +2,12 @@ const { spawn } = require("child_process") // 用于创建子进程
 const constantCode = require("./constant")
 const chalk = require("chalk") // 为控制台输出添加色彩
 const log = console.log
-const proConfig = require("../../src/share/pro-config")
-
-const nodeServerPort = proConfig.nodeServerPort
 
 log(chalk.red('servers starting....'));
 
 // 前端代码构建 服务进程
 const feCodeWatchProcess = spawn('npm', ['run', 'fe:watch'], { stdio:'inherit', shell: process.platform === 'win32' })
 
-console.log(111)
 // 服务端代码监控和编译进程
 const svrCodeWatchProcess = spawn('npm', ['run', 'svr:watch'], { shell: process.platform === 'win32' })
 
