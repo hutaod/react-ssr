@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-// import "./index.css"
+import "./index.css"
 
 export default class Index extends React.Component {
   constructor(props) {
@@ -46,7 +46,7 @@ export default class Index extends React.Component {
           <meta name="description" content={tdk.description} />
           <meta name="keywords" content={tdk.keywords} />
         </Helmet>
-        <h1 onClick={this.handleClick}>Click here!</h1>
+        <h1 onClick={this.handleClick} className="index-box">Click here!</h1>
       </Fragment>
     )
   }

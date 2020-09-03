@@ -18,14 +18,13 @@ module.exports = {
         ],
         '@babel/preset-react'
       ],
-      plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-export-default-from']
+      plugins: ['@babel/plugin-proposal-class-properties', "./webpack/babel/plugin/no-require-css"]
     },
     development: {
       presets: [
         [
           '@babel/preset-env',
           {
-            useBuiltIns: 'entry',
             targets: {
               browsers: ['>1%', 'last 2 versions', 'not ie <= 8'],
             }
@@ -33,7 +32,7 @@ module.exports = {
         ],
         '@babel/preset-react'
       ],
-      plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-proposal-export-default-from']
+      plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime']
     }
   }
 }
