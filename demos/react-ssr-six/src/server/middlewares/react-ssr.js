@@ -6,6 +6,11 @@ import { renderToString } from "react-dom/server"
 import { Helmet } from 'react-helmet';
 // import pathToRegexp from "path-to-regexp"
 import matchRoute from "../../share/matchRoute"
+//导入资源处理库
+const getAssets = require('../common/assets');
+//得到静态资源
+const assetsMap = getAssets();
+
 
 export default async (ctx, next) => {
   const path = ctx.path
@@ -36,14 +41,14 @@ export default async (ctx, next) => {
     <head>
       ${helmet.title.toString()}
       ${helmet.meta.toString()}
-      <link rel="stylesheet" type="text/css" href="/main.css" />
+      ${assetsMap.css.join('')}
     </head>
     <body>
       <div id="root">${html}</div>
       <textarea id="ssrTextInitData" style="display:none;">
         ${JSON.stringify(context.initialData || {})}
       </textarea>
-      <script src="main.js"></script>
+      ${assetsMap.js.join('')}
     </body>
     </html>
   `)
