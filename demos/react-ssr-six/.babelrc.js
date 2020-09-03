@@ -33,20 +33,6 @@ module.exports = {
         '@babel/preset-react'
       ],
       plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime']
-    },
-    production: {
-      presets: [
-        [
-          '@babel/preset-env',
-          {
-            targets: {
-              browsers: ['>1%', 'last 2 versions', 'not ie <= 8'],
-            }
-          }
-        ],
-        '@babel/preset-react'
-      ],
-      plugins: ['@babel/plugin-proposal-class-properties', '@babel/plugin-transform-runtime']
     }
   }
 }

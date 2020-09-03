@@ -9,6 +9,8 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 // 压缩 js 插件 内置了
 // const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
 
+process.env.BABEL_ENV = 'development' ;//指定 babel 编译环境
+
 //构建前清理目录
 const {
   CleanWebpackPlugin

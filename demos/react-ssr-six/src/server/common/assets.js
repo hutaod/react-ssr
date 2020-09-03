@@ -12,9 +12,9 @@ module.exports = function () {
 
   if (!__IS_PROD__) {
     //开发环境
-    assets.js.push(
-      `<script type="text/javascript"  src="${devHost}/thirds.js"></script>`
-    )
+    // assets.js.push(
+    //   `<script type="text/javascript"  src="${devHost}/thirds.js"></script>`
+    // )
     assets.js.push(
       `<script type="text/javascript"  src="${devHost}/main.js"></script>`
     )
